@@ -8,3 +8,30 @@ Run **[Singularity Viewer](https://www.singularityviewer.org)** in a web-accessi
 
 > [!WARNING]  
 > This is not even remotely ready. Use at your own risk.
+
+## Quickstart
+
+> [!IMPORTANT]  
+> This instruction gets you up and running, but comes with no security guardrails. **Use at your own risk**, and absolutely **do not use in a shared environment**.
+
+To run the server, use the following command:
+
+```sh
+docker run -d \
+  --name singularity-web \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Etc/UTC \
+  -p 3000:3000 \
+  -p 3001:3001 \
+  ghcr.io/soup-bowl/singularity-web:edge
+```
+
+Add:
+
+* `-v ./config:/config` for configuration persistence.
+* `--security-opt seccomp=unconfined` for older systems with seccomp issues.
+* `--device /dev/dri:/dev/dri` to give the container GPU access.
+  * `--group-add video` may also be needed.
+
+This will make an instance available on http://localhost:3000. 
