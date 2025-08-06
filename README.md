@@ -1,4 +1,5 @@
-<h1 align="center">Singularity Web (unofficial)</h1>
+<h1 align="center">Singularity Web</h1>
+<p align="center"><strong>Unofficial</strong></p>
 
 <p align="center">
   <img src="https://f.subo.dev/i/o/sd1.webp" alt="Screenshot from inside the Singularity Metaverse client contained within the Chromium web browser, showing a woman with a floating nametag 'Balthazar Swindon' staring out into empty landmass" />
