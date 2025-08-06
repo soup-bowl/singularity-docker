@@ -4,7 +4,7 @@
   <img src="https://f.subo.dev/i/o/sd1.webp" alt="Screenshot from inside the Singularity Metaverse client contained within the Chromium web browser, showing a woman with a floating nametag 'Balthazar Swindon' staring out into empty landmass" />
 </p>
 
-Run **[Singularity Viewer](https://www.singularityviewer.org)** in a web-accessible Docker container, similar to **Second Life Zero**. Built upon the [Selkies Linuxserver base image](https://github.com/linuxserver/docker-baseimage-selkies).
+Run **[Singularity Viewer][singularity]** in a web-accessible Docker container, similar to **Second Life Zero**. Built upon the [Selkies Linuxserver base image][selkies].
 
 > [!WARNING]  
 > This is not even remotely ready. Use at your own risk.
@@ -34,4 +34,8 @@ Add:
 * `--device /dev/dri:/dev/dri` to give the container GPU access.
   * `--group-add video` may also be needed.
 
-This will make an instance available on http://localhost:3000. 
+This will make an instance available on http://localhost:3000. For further configuration, see the [base image documentation][selkies].
+
+[singularity]: https://www.singularityviewer.org
+[selkies]: https://github.com/linuxserver/docker-baseimage-selkies
+
