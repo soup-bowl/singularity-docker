@@ -20,6 +20,7 @@ RUN VERSION2=$(echo $VERSION | tr '.' '_') && \
 	tar -xJf /tmp/viewer.tar.xz -C /opt/viewer-install --strip-components=1
 
 COPY /root /
+COPY branding /etc/s6-overlay/s6-rc.d/init-adduser/branding
 
 ENV TITLE="Singularity Viewer" \
 	NO_DECOR="true"
