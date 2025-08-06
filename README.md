@@ -14,7 +14,7 @@ Run **[Singularity Viewer][singularity]** in a web-accessible Docker container, 
 > [!IMPORTANT]  
 > This instruction gets you up and running, but comes with no security guardrails. **Use at your own risk**, and absolutely **do not use in a shared environment**.
 
-To run the server, use the following command (or [see the Docker Compose file](/docker-compose.yml):
+To run the server, use the following command (or [see the Docker Compose file](/docker-compose.yml)):
 
 ```sh
 docker run -d \
