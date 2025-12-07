@@ -17,7 +17,8 @@ RUN VERSION2=$(echo $VERSION | tr '.' '_') && \
     curl -L -o /tmp/viewer.tar.xz \
     https://github.com/singularity-viewer/SingularityViewer/releases/download/sv-${VERSION}-release/Singularity_${VERSION2}_${PLAT}.tar.xz && \
 	mkdir -p /opt/viewer-install && \
-	tar -xJf /tmp/viewer.tar.xz -C /opt/viewer-install --strip-components=1
+	tar -xJf /tmp/viewer.tar.xz -C /opt/viewer-install --strip-components=1 && \
+	cp -f /opt/viewer-install/viewer_icon.png /usr/share/selkies/www/icon.png
 
 COPY /root /
 COPY branding /etc/s6-overlay/s6-rc.d/init-adduser/branding
