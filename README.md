@@ -5,7 +5,7 @@
   <img src="https://f.subo.dev/i/o/sd1.webp" alt="Screenshot from inside the Singularity Metaverse client contained within the Chromium web browser, showing a woman with a floating nametag 'Balthazar Swindon' staring out into empty landmass" />
 </p>
 
-Run **[Singularity Viewer][singularity]** in a web-accessible Docker container, similar to **Second Life Zero**. Built upon the [Selkies Linuxserver base image][selkies].
+Run **[Singularity Viewer][singularity]** in a web-accessible Docker/Podman container, similar to **Second Life Zero**. Built upon the [Selkies Linuxserver base image][selkies].
 
 > [!WARNING]  
 > This is **pre-pre-pre-alpha**. Use at your own risk. For Firestorm, [see the firestorm-docker repo](https://github.com/soup-bowl/firestorm-docker).
