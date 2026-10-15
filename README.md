@@ -10,6 +10,12 @@ Run **[Singularity Viewer][singularity]** in a web-accessible Docker/Podman cont
 > [!WARNING]  
 > This is **pre-pre-pre-alpha**. Use at your own risk. For Firestorm, [see the firestorm-docker repo](https://github.com/soup-bowl/firestorm-docker).
 
+## Supported tags
+
+Version refers to the [Singularity version](https://github.com/singularity-viewer/SingularityViewer/releases). **Tags outside of this are not updated**
+
+- [`edge`, `1`, `1.8`, `1.8.9.8338`](https://github.com/soup-bowl/singularity-docker/blob/singularity/1.8/Dockerfile)
+
 ## Quickstart
 
 > [!IMPORTANT]  
@@ -36,6 +42,15 @@ Add:
   * `--group-add video` may also be needed.
 
 This will make an instance available on http://localhost:3000. For further configuration, see the [base image documentation][selkies].
+
+## Updating Versions
+
+Versions are defined in [`versions.json`](/versions.json), in a similar style to the [Docker Official Images](https://github.com/docker-library). The per-version Dockerfiles are generated from [`Dockerfile.template`](/Dockerfile.template), so do not edit them directly.
+
+1. Add or bump the entry in `versions.json` (the key is the `major.minor` line, `version` is the full Singularity version).
+2. Run `./apply-templates.sh` to regenerate the `<version>/Dockerfile` files, and commit the result.
+
+The build workflow reads `versions.json` to decide what to build, and tags each image with its full version and `major.minor`. The newest version of each major also gets the major tag, and the newest overall gets `edge`. Run `./generate-matrix.sh` to preview the tags.
 
 [singularity]: https://www.singularityviewer.org
 [selkies]: https://github.com/linuxserver/docker-baseimage-selkies

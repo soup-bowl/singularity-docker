@@ -1,3 +1,9 @@
+#
+# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
+#
+# PLEASE DO NOT EDIT IT DIRECTLY.
+#
+
 FROM ghcr.io/linuxserver/baseimage-selkies:ubuntunoble
 
 ARG VERSION=1.8.9.8338
