@@ -4,11 +4,67 @@ on:
   push:
     branches:
       - singularity
+    paths:
+      - versions.json
+      - Dockerfile.template
+      - '*/Dockerfile'
+      - apply-templates.sh
+      - generate-matrix.sh
+      - root/**
+      - branding/**
+      - .github/workflows/build.yml
+  pull_request:
+    paths:
+      - versions.json
+      - Dockerfile.template
+      - '*/Dockerfile'
+      - apply-templates.sh
+      - generate-matrix.sh
+      - root/**
+      - branding/**
+      - .github/workflows/build.yml
   workflow_dispatch:
 
 jobs:
-  build:
+  generate:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v6
+
+      - name: Check Generated Dockerfiles
+        run: |
+          ./apply-templates.sh
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --short
+            git diff
+            echo "::error::Generated Dockerfiles are out of date. Run ./apply-templates.sh and commit the result."
+            exit 1
+          fi
+
+      - name: Generate Build Matrix
+        id: matrix
+        run: |
+          matrix="$(./generate-matrix.sh)"
+          echo "$matrix" | jq .
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: generate
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.generate.outputs.matrix) }}
+
+    name: build (${{ matrix.version }})
 
     permissions:
       contents: read
@@ -16,27 +72,39 @@ jobs:
 
     steps:
       - name: Checkout Codebase
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Login to GitHub CR
-        uses: docker/login-action@v3
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
+
+      - name: Generate Docker Tags
+        id: meta
+        run: |
+          {
+            echo "tags<<EOF"
+            echo '${{ toJson(matrix.tags) }}' | jq -r '.[] | "ghcr.io/${{ github.repository_owner }}/singularity-web:" + .'
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Build Container
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
-          push: true
-          tags: ghcr.io/${{ github.actor }}/singularity-web:edge
+          context: .
+          file: ${{ matrix.version }}/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
